@@ -75,6 +75,7 @@ bool ke04_probe(target_s *target);
 bool rp_probe(target_s *target);
 bool renesas_probe(target_s *target);
 bool imxrt_probe(target_s *target);
+bool apollo2_probe(target_s *target);
 
 void lpc55_dp_prepare(adiv5_debug_port_s *dp);
 
