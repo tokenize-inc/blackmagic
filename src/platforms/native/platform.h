@@ -247,6 +247,7 @@ extern bool debug_bmp;
 #define IRQ_PRI_USBUSART     (2U << 4U)
 #define IRQ_PRI_USBUSART_DMA (2U << 4U)
 #define IRQ_PRI_USB_VBUS     (14U << 4U)
+#define IRQ_PRI_SWO_DMA      (0U << 4U)
 #define IRQ_PRI_TRACE        (0U << 4U)
 
 #define USBUSART        HW_SWITCH(6, USBUSART1, USBUSART2)
@@ -271,7 +272,20 @@ extern bool debug_bmp;
 #define USBUSART1_DMA_TX_ISR(x) dma1_channel4_isr(x)
 #define USBUSART1_DMA_RX_CHAN   DMA_CHANNEL5
 #define USBUSART1_DMA_RX_IRQ    NVIC_DMA1_CHANNEL5_IRQ
-#define USBUSART1_DMA_RX_ISR(x) dma1_channel5_isr(x)
+//#define USBUSART1_DMA_RX_ISR(x) dma1_channel5_isr(x)
+
+#define SWO_UART        USART1
+#define SWO_UART_DR     USART1_DR
+#define SWO_UART_CLK    RCC_USART1
+#define SWO_UART_PORT   GPIOA
+#define SWO_UART_RX_PIN GPIO10
+
+/* This DMA channel is set by the USART in use */
+#define SWO_DMA_BUS    DMA1
+#define SWO_DMA_CLK    RCC_DMA1
+#define SWO_DMA_CHAN   DMA_CHANNEL5
+#define SWO_DMA_IRQ    NVIC_DMA1_CHANNEL5_IRQ
+#define SWO_DMA_ISR(x) dma1_channel5_isr(x)
 
 #define USBUSART2               USART2
 #define USBUSART2_IRQ           NVIC_USART2_IRQ
@@ -326,5 +340,12 @@ extern bool debug_bmp;
  */
 #define BITBANG_DIVIDER_OFFSET 52U
 #define BITBANG_DIVIDER_FACTOR 30U
+
+
+
+#define NUM_TRACE_PACKETS 32U /* This is an 8K buffer */
+#define TRACESWO_PROTOCOL 2U   /* 1 = Manchester, 2 = NRZ / async */
+
+
 
 #endif /* PLATFORMS_NATIVE_PLATFORM_H */
