@@ -65,7 +65,7 @@
 
 static bool clear_sram_parameters(target_s *target, uint32_t pSram, uint32_t pStart) {
     if (pSram < pStart) {
-		DEBUG_INFO("sram pointer %lu less than start address %lu\n", pSram, pStart);
+		DEBUG_INFO("sram pointer %u less than start address %u\n", pSram, pStart);
 		return false;
 	}
 	while (pSram > pStart) {
@@ -81,7 +81,7 @@ static uint32_t setup_sram(target_s *target, int width, uint32_t arr[width]) {
     uint32_t pSram = APOLLO2_SRAM_ADDR;
 
 	for (int i = 0; i < width; i++) {
-		DEBUG_INFO("pSram[0x%08lX] 0x%08lX\n", pSram, arr[i]);
+		DEBUG_INFO("pSram[0x%08X] 0x%08X\n", pSram, arr[i]);
 		if (arr[i] == APOLLO2_BREAKPOINT)
 			pSramRetval = pSram;
 		target_mem_write32(target, pSram, arr[i]);
@@ -89,7 +89,7 @@ static uint32_t setup_sram(target_s *target, int width, uint32_t arr[width]) {
 		pSram += sizeof(uint32_t);
 	}
 
-	DEBUG_INFO("pSram[pSramRetval] 0x%08lX\n", pSramRetval);
+	DEBUG_INFO("pSram[pSramRetval] 0x%08X\n", pSramRetval);
 	return pSramRetval;
 }
 
@@ -106,7 +106,7 @@ static bool check_flash_status(target_s *target, target_addr_t addr) {
 }
 
 static bool exec_command(target_s *target, uint32_t command, uint32_t flash_return_address) {
-    DEBUG_INFO("pROM[Bootloader] 0x%08lX\n", command);
+    DEBUG_INFO("pROM[Bootloader] 0x%08X\n", command);
 
     /* Set up for the call to the IAP ROM */
 	uint32_t regs[target->regs_size / sizeof(uint32_t)];
