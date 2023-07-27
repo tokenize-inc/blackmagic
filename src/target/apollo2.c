@@ -81,7 +81,6 @@ static uint32_t setup_sram(target_s *target, int width, uint32_t arr[width]) {
     uint32_t pSram = APOLLO2_SRAM_ADDR;
 
 	for (int i = 0; i < width; i++) {
-		DEBUG_INFO("pSram[0x%08X] 0x%08X\n", pSram, arr[i]);
 		if (arr[i] == APOLLO2_BREAKPOINT)
 			pSramRetval = pSram;
 		target_mem_write32(target, pSram, arr[i]);
@@ -89,7 +88,6 @@ static uint32_t setup_sram(target_s *target, int width, uint32_t arr[width]) {
 		pSram += sizeof(uint32_t);
 	}
 
-	DEBUG_INFO("pSram[pSramRetval] 0x%08X\n", pSramRetval);
 	return pSramRetval;
 }
 
@@ -106,7 +104,6 @@ static bool check_flash_status(target_s *target, target_addr_t addr) {
 }
 
 static bool exec_command(target_s *target, uint32_t command, uint32_t flash_return_address) {
-    DEBUG_INFO("pROM[Bootloader] 0x%08X\n", command);
 
     /* Set up for the call to the IAP ROM */
 	uint32_t regs[target->regs_size / sizeof(uint32_t)];
@@ -142,17 +139,11 @@ static bool exec_command(target_s *target, uint32_t command, uint32_t flash_retu
 }
 
 static bool exec_sram_command(target_s *target, uint32_t command, const char* cmd_name, int width, uint32_t arr[]) {
-    if(cmd_name) {
-        DEBUG_INFO("Starting %s\n", cmd_name);
-    }
-    
+    (void) cmd_name;  // this is now unused, but keeping it in the signature for future debugging
+
     uint32_t return_address = setup_sram(target, width, arr);
     bool success = exec_command(target, command, return_address);
     clear_sram_parameters(target, return_address, APOLLO2_SRAM_ADDR);
-
-    if(cmd_name) {
-        DEBUG_INFO("Finished %s\n", cmd_name);
-    }
 
     return success;
 }
